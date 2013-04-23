@@ -1,0 +1,15 @@
+target/
+logs/
+dist/
+*.lock
+.DS_Store
+project/boot/
+.history
+.idea
+RUNNING_PID
+.classpath
+.project
+.settings/
+.target/
+.cache
+*.iml
