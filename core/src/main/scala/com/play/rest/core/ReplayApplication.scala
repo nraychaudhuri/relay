@@ -7,12 +7,12 @@ import java.io.File
 import play.core.{DevSettings, SourceMapper}
 import play.utils.Threads
 
-class ReplayApplication(private val cl: ClassLoader, private val pf: PartialFunction[RequestHeader, Handler])
+class ReplayApplication(r: PartialFunction[RequestHeader, Handler], g: GlobalSettings, cl: ClassLoader)
   extends Application with WithDefaultPlugins {
 
   private[this] val _routes = new play.core.Router.Routes {
 
-    override def routes: PartialFunction[RequestHeader, Handler] = pf
+    override def routes: PartialFunction[RequestHeader, Handler] = r
 
     def documentation: Seq[(String, String, String)] = ???
     private var _prefix = "/"
@@ -32,7 +32,7 @@ class ReplayApplication(private val cl: ClassLoader, private val pf: PartialFunc
   def sources: Option[SourceMapper] = None
   def mode: Mode.Mode = Mode.Prod
   def configuration: Configuration = fullConfiguration
-  def global: GlobalSettings = DefaultGlobal
+  def global: GlobalSettings = g
 
   private lazy val initialConfiguration = Threads.withContextClassLoader(this.classloader) {
     Configuration.load(path, Mode.Dev, this match {

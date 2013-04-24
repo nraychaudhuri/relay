@@ -7,13 +7,15 @@ import play.api.mvc.{Action, Results}
 object Main extends App {
 
   val routes: ReplayRoutes = {
-    case r@GET(Path("/")) =>
+    case GET(Path("/")) =>
       controllers.Application.index
-    case r@GET(Path(Seg("assets" :: file))) =>
+    case GET(Path("/akka")) =>
+      controllers.Application.akkaAction
+    case GET(Path(Seg("assets" :: file))) =>
       controllers.Assets.at(path = "/public", file.mkString("/"))
     case _ => Action(Results.NotFound)
   }
 
-  Replay(routes, 9000)
+  PlayServer.start(routes)
 }
 
